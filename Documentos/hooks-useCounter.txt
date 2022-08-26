@@ -1,0 +1,33 @@
+Sabemos que es un hook porque cuenta con el prefijo use, un hook no es mas que una función, lo que lo diferencia a otras funciones que esta función va a poder interactuar
+y almacenar estados y funciones que tengan que ver con elmmestado como esta :
+
+const [counter, increment, reset] = useCounter();
+
+Este hook me almacena tod la información de un contador incluyendo funciones para incrementarlo y resetearlo.....
+
+Los Hooks tienen una estructura muy similar a la de un componente de React con la diferencia a que no utiliza JSX o por lo menos en la mayor parte de los casos casi siempre 
+lo  unico que manejan es la logica del estado principalmente; no se va a retorn JSX por ende se va a retornar las variables que vamos a necesitar en nuestro componente, las 
+cuales empezamos a crear como variables constantes:
+
+
+import { useState } from 'react'
+
+const useCounter = () => {
+    const [counter, setCounter] = useState(0); //Creamos el estado y lo vamos a inicializar en 0
+
+    const increment = () =>{//creamos la función increment y sera un arrowFunction
+        setCounter(counter+1);//va a hacer el incremento del contador
+    }
+
+    const reset = () => {//Creamos la función de Reset, también sera una arrowFunction
+        setCounter(0); //Se inicializa en cero 
+    }
+
+  return [
+    counter,
+    increment,
+    reset
+  ]
+}
+
+export { useCounter };

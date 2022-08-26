@@ -1,1 +1,55 @@
-Realizamos la creación de nuestro archivo counterapp.js el cual va a ser nuestro primer custom hook 
+Realizamos la creación de nuestro archivo counterapp.js el cual va a ser nuestro primer custom hook.
+
+Vamos a realizar un contador en un Hook personalizado y mediante la logica de ese Hook vamos a representar los datos en este componente.
+
+En el H1 ponemos en un H1 "Clicks: 0 " de allí saldra la cantidad de clicks que registra el contador y creamos un boton con el texto "Incrementar", se duplica el boton
+y en el segundo se asigna como "Resetear":
+
+import React from 'react'
+
+const CounterApp = () => {
+  return (
+    <div>
+        <h1>Clicks: 0</h1>
+        <button>
+            Incrementar
+        </button>
+
+        <button>
+            Resetear
+        </button>
+    </div>
+  )
+}
+
+export {CounterApp};
+
+Ahora creamos una constante que va a extraer de un arreglo retornado por el custom Hook (useCounter), el cual ya se creo, de ahí se va a extraer el estado counter 
+también una función para incrementar el contador (increment)  y una función para volverlo a su valor inicial (reset):
+
+import React from 'react'
+
+const CounterApp = () => {
+    const [counter, increment, reset] = useCounter();
+
+
+  return (
+    <div>
+        <h1>Clicks: 0</h1>
+        <button>
+            Incrementar
+        </button>
+
+        <button>
+            Resetear
+        </button>
+    </div>
+  )
+}
+
+export {CounterApp};
+
+Después de estos pasos empezamos a crear nuestro hook, dentro de la carpeta SRC creamos una carpeta llamada "hooks" y allí creamos un archivo llamado "useCounter.js"
+
+Después de realizar configuracion respectiva en ese archivo lo importamos...en Clicks llamamos al contador en el boton llamamos al evento onClick con el cual vamos a 
+lleva la cuenta con la función increment y en el boton de reset cuando hagamos click que llame a la fucnión reset 
