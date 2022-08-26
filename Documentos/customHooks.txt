@@ -1,0 +1,4 @@
+Vamos a empezar a trabajar con los customHooks, basicamente son hooks personalizados que podremos hacer para abstraer la logica de estado de nuestra aplicación 
+y hacerla reutilizable y también lograr componentes mucho mas legibles, esta es una caracteristica de React.
+
+Primero realizamos una limpieza (eliminación) de los archivos que no necesitamos y sus respectivas extensiones 
