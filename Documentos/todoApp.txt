@@ -1,0 +1,77 @@
+En este archivo vamos a crear una lista de tareas muy sencilla y vamos a importarlo en el App.js.
+
+despue´s de crear los elementos en nuestro documento ToDo vamos a crear temporalmente un estado que nos guarde las tareas, cuando creamos el estado lo hacemos con un 
+array y valor inicial el cual lo creamos con una variable constante el cual va a ser un arreglo de objetos, cada una tendra un id y un titulo; después de declarar 
+e inicializar esas variables vamos a mostrar ambas tareas iterando sobre el estado todos que va a contener ese valor inicial.
+
+Dentro de la <ul></ul>> creamos una sentencia de JavaScript e iteramos sobre el estado todos mediante el map, para cada tarea retornamos todo lo que hay dentro del <li></li>
+
+Recordemos que cuando renderizamos lista el elemento mas externo debe tener un key unico, en este caso sera el id de cada tarea que iteramos:
+
+import React, {useState} from 'react'
+
+const initialTodos = [
+    {id: 1, title: 'Aprender React' },
+    {id: 2, title: 'Aprender Node.js' },
+]
+
+const TodoApp = () => {
+    const [todos, useTodos] = useState(initialTodos);
+  return (
+    <div>
+        <ul>
+            {todos.map(todo =>(
+                <li key={todo.id}>
+                {todo.title}
+                <br/>
+                <button>Eliminar</button>
+            </li>
+
+            ))}            
+        </ul>
+    </div>
+  )
+}
+
+export { TodoApp };
+
+Ahora dentro del div  pero mas abajo del ul vamos a crear un boton que nos va a servir para agregar una nueva tarea, cuando verificamos que se representa correctamente 
+empezamos a eliminar nuestro estado para representarlo en nuestro hook personalizado en el cual se va a generar.
+
+Lo que queremos hacer es basicamente obtener todos, necesitamos una función para agregar una tarea y necesitamos una función para eliminar una tarea en especifico
+entonces creamos un arreglo que va a extraer los todos con la funcion addTodo y la función deleteTodo y esto va a ser igual a un hook que vamos a crear el cual se llama
+useTodos que como valor inicial vamos a pasarle las tareas que habiamos inicalizado con anterioridad para que se carguen en el estado que va a tener internamente:
+
+
+import React from 'react'
+
+const initialTodos = [
+    {id: 1, title: 'Aprender React' },
+    {id: 2, title: 'Aprender Node.js' },
+]
+
+const TodoApp = () => {
+    const [todos, addTodo, deleteTodo] = useTodos(initialTodos);
+   
+  return (
+    <div>
+        <ul>
+            {todos.map(todo =>(
+                <li key={todo.id}>
+                {todo.title}
+                <br/>
+                <button>Eliminar</button>
+            </li>
+
+            ))}            
+        </ul>
+        <button>Nueva tarea</button>
+    </div>
+  )
+}
+
+export { TodoApp };
+
+En nuestra carpeta hooks vamos a crear nuestro hook useTodos, en ella hacemos la creación y configuración de nuestro hook, para que funcione respectivamente debemos 
+traerla en el boton "Nueva tarea" por medio de un evento onClik llamamos a la funcion y le vamos a enviar una tarea la cual va a ser un objeto que va a conetener 
+ un title 

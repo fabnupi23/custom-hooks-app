@@ -1,0 +1,55 @@
+Como los Hooks tienen la sintaxis tan similar a la de un componente, con la diferente de que en vez de importar React, vamos a importar o extraer el useState, no ocupamos
+React porque basicamente no vamos a utilizar JSX, en el return eliminamos el conteniedo y vamos a retornar un arreglo, lo que va a contener este arreglo que lo que nosotros 
+vamos a consumir, en este caso van a ser los Todos la función de agregar una tarea y la función de eliminar una tarea, teniendo en cuenta de que ninguna de ellas existe procedemos
+a crearlas por medio de variables const, recordemos que como valor incial debemos pasarle los Todos iniciales para que siga con el mismo comportamiento, entonces en el 
+argumento del hook recibimos initialTodos ya que asi llamamos ese parametro al momento de diseñarlo, así que podemos recbiri este parametro en el argumento del hook y después
+se lo asignamos al estado que estamos creando:
+
+import { useState } from 'react'
+
+const useTodos = (initialTodos) => {
+    const [todos, setTodos] = useState(initialTodos);
+
+  return [
+    todos,
+    addTodo,
+    deleteTodo,
+  ]
+}
+
+export { useTodos };
+
+Ahora procedemos con la función para agregar un nuevo todo y va a ser una arrowFunction que va arecibir un objeto newTodo, este objeto deberia contener el titulo de la tarea
+que vamos a agregar, para agregarlo es de la siguiente forma, creando setTodos y en el un arreglo, enviamos una copia de todos los objetos que habian en el arreglo todos y
+adicionalmente agregamos ese newTodo 
+
+import { useState } from 'react'
+
+const useTodos = (initialTodos) => {
+    const [todos, setTodos] = useState(initialTodos);
+
+    const addTodo = (newTodo) => {
+        newTodo.id = Date.now();    //Generamos un numero con base a la fecha y hora actual algo que sera lo suficientemente aleatorio para simular un id unico; este dato lo podemos mutar porque es un valor que no es un estado mientras los Todos no los podemos mutar porque son un estado 
+        setTodos([
+            ...todos,
+            newTodo
+        ])
+    }
+
+  return [
+    todos,
+    addTodo,
+    deleteTodo,
+  ]
+}
+
+export { useTodos };
+
+Acá vamos a crear una función para eliminar un ToDo en especifico, en este caso la función deteTodo va a ser un arrowFunction que va a recibir el id de la tarea que queremos 
+eliminar y para poder eliminar la tarea que tiene este id en especifico todoId, vamos a hacer un filtro sobre el arreglo Todos nuestro estado original  iterando sobre cada ToDo
+y devuelve unicamente las tareas que cumplan con la condición, que el ID del ToDo sea diferente al que estamos recibiendo en el argumento así toda esa expresión nos va a devolver
+un arreglo con la lista de ToDos pero descartando el todo que tiene en ese ID:
+
+const deleteTodo = (todoId) => {
+        setTodos(todos.filter(todo => todo.id != todoId))
+    }

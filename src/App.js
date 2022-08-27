@@ -1,10 +1,12 @@
 import React from 'react';
-import {CounterApp} from './CounterApp';
+import { TodoApp } from './TodoApp';
+/* import {CounterApp} from './CounterApp'; */
 
 function App() {
   return (
     <div>
-      <CounterApp/>
+      {/* <CounterApp/> */}
+      <TodoApp/>
     </div>
   );
 }
