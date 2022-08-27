@@ -1,0 +1,56 @@
+Realizamos el mismo proceso que en loss hooks anteriores, solo que acá vamos aretornar la posicion del Mouse y ahora en vez de construir el hook reutilizamos lo que
+ya hicimos:
+
+const [position, setPosition] = useState(initialPosition);
+
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            const {clientX, clientY } = e;
+            setPosition({
+                x: clientX,
+                y: clientY
+            })  
+        }
+        window.addEventListener('mousemove', handleMouseMove)
+    }, []);
+
+_____________________________________________________________________________________
+
+Entonces quedaria de la siguiente manera:
+
+import { useState, useEffect } from 'react'
+
+const useMousePosition = () => {
+
+    const [position, setPosition] = useState(initialPosition);
+
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            const {clientX, clientY } = e;
+            setPosition({
+                x: clientX,
+                y: clientY
+            })  
+        }
+        window.addEventListener('mousemove', handleMouseMove)
+    }, []);
+
+
+
+
+  return position;
+}
+
+export { useMousePosition };
+
+Entonces ya estariamos creando el estado posicion y estariamos diciendo que cuando se monte el hook o en este caso, se monte el componente que usa el hook, MouseApp
+actualice en tiempo real la posicio del mouse y que me retorne dicha posición.
+
+Algo muy importante que debemos tener en cuenta y no puede faltar es que cuando agregamos un listener a un efecto necesitamos remover el listener cuando el efecto se desmonte
+como este efecto esta en un hook, el efecto se va a remover cuando el componente que usa dicho hook se desmonte, así que retornamos una función y lo que se ejecute en esa función
+ocurrira cuando el hook se desmonte:
+
+return () => {
+            window.removeEventListener('mousemove', handleMouseMove)
+        }
+

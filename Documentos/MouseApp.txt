@@ -1,0 +1,128 @@
+En este ejercicio vamos a obtener las coordenadas del Mouse, que cuando el mouse este en la mitad izquierda de la ventana un div de esa posicion se pinte en algún color 
+y cuando este en la parte derecha se pinte de otro color, en los ejemplos anteriores hemos ido creando primero el hook y después lo hemos implementado en el componente 
+pero a veces cuando la logica es un poco mas compleja se recomienda montar todo en un componente  y después de ver que funciona se abstrae a un hook.
+
+Empezamos importando el useState y creamos su nuevo estado, el cual va a ser un objeto, como valor incial le pondremos initialPosition, después creamos un bjeto llamado
+initialPosition con dos atributos x: , y: cuyo valor inicial va a ser null y ahora vamos a escuchar los movimientos del mouse en la ventana y cuando necesitamos algun listener
+en el windows utilizamos el hook de efecto (useEffect) y debajo del estado vamos acrear un nuevo efecto que recibe una función y un arreglo de dependencias, cuando se cargue
+el componente por primera vez  vamos a ponerle un listener al window, entonces mediante el evento mousemove cuando el usuario haga un movimiento del mouse ejecuta la función 
+handleMouseMove:
+
+
+
+const MouseApp = () => {
+    const [position, setPosition] = useState(initialPosition);
+
+    useEffect(() => {
+        const handleMouseMove = () => {
+            handleMouseMove
+        }
+        window.addEventListener('mousemove', handleMouseMove)
+    })
+
+    La función handleMouseMove se crea dentro del useEffect ya que si se crea por fuera (Lo cual se podría) se volveria  una dependencia y al volverse una dependencia 
+    necesitariamos utilizar el useCodba, entonces para ahorrarnos esa implementación la creamos dentro del efecto, ahora borramos el h1 e imprimimos la posicion actual
+    recordemos que es un objeto así que lo convertimos a un string por medio de un JSON.stringify
+
+    const MouseApp = () => {
+    const [position, setPosition] = useState(initialPosition);
+
+    useEffect(() => {
+        const handleMouseMove = () => {
+            console.log('Se movió el Mouse');   
+        }
+        window.addEventListener('mousemove', handleMouseMove)
+    }, []);
+
+  return (
+    <div>
+        <pre>
+            { JSON.stringify(position, null, 2) }
+        </pre>
+    </div>
+  )
+}
+
+Ahora cada vez que se mueva el mouse vamos a guardar en la posicion las coordenadas del mismo, ¿como hacemos para obtenerla?, como la función handleMouseMove se esta 
+llamando dentro de un evento especificamente el evento mouseMove del window automaticamente se va a inyectar en su primer parametro el evento y vamos a extraer del objeto
+evento dos parametros: el clientX y el clientY, que basicamente son las posiciones horinzotales y verticales del mouse, después lo enviamos a la consola para observar que 
+tenemos ahí:
+
+const MouseApp = () => {
+    const [position, setPosition] = useState(initialPosition);
+
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            const {clientX, clientY } = e;
+            console.log(clientX, clientY);   
+        }
+        window.addEventListener('mousemove', handleMouseMove)
+    }, []);
+_____________________________________________________________________________________
+
+Y ahora podemos actualizar la posicion cada vez que se mueva el mouse:
+
+ useEffect(() => {
+        const handleMouseMove = (e) => {
+            const {clientX, clientY } = e;
+            setPosition({
+                x: clientX,
+                y: clientY
+            })  
+        }
+        window.addEventListener('mousemove', handleMouseMove)
+    }, []);
+
+
+Ahora toda esta logica la extraemos en un customHook pues podemos observar que todo esto tiene una función unica que es obtener la posicion del mouse por lo tanto el estado
+y el efecto lo podemos separar en un hook independiente que maneje dicha logica de estado y nos retorne lo que nos imporque que es la posicion actual.
+
+Ya realizado la creación del hook, debemos realizar la importación del hook.
+
+para verificar la posicion del mouse y se ralice un cambio de color en el <div></div> agregamos una etiqueta style al elemento <div></div> el cual agregamos codigo JavaScript
+la importación de la variable background y la medida que va a ocupar el color, la variable background la cual es una constante y en ella se esta evaluando si la posicion x
+es menor a la mitad del window me presente el color naranja de lo contrario me presenta el color celeste:
+
+const MouseApp = () => {
+    const position = useMousePosition();
+
+    const background = position.x < window.innerWidth/2 ? 'orange' : 'lightblue';
+
+  return (
+    <div style={{background, height: '100vh' }}>
+        <pre>
+            { JSON.stringify(position, null, 2) }
+        </pre>
+    </div>
+  )
+}
+
+cuando esto es un proceso un poco mas complejo o pesado, llegado el caso que lo necesitemos podemos utilizar el useMemo y para alzar el useMemo vamos a tener que memorizar
+el proceso de validación en la constante background; en este vamos a tener que invocar la función o proceso que queremos memorizar y después el arreglo de dependencias que 
+vamos a escuchar, esta función debe retornar un valor, pero en lugar de crear una función que retorne un valor coloquemos directamente un valor que retorna naranja o celeste
+dependiendo de cual sea el valor de la posicion, ahora necesitamos poner en el array necesitamos poner la posicion como dependencia ya que si no lo ponemos el va a calcular
+solamente el valor inicial 
+
+import React, { useMemo } from 'react'
+import { useMousePosition } from './hooks/useMousePosition';
+
+     
+
+const MouseApp = () => {
+    const position = useMousePosition();
+
+    const background = useMemo(() => 
+        position.x < window.innerWidth/2 ? 'orange' : 'lightblue'
+    , [position]);
+
+  return (
+    <div style={{background, height: '100vh' }}>
+        <pre>
+            { JSON.stringify(position, null, 2) }
+        </pre>
+    </div>
+  )
+}
+
+export { MouseApp };
+  
